@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scan to book · Austin Co-Host Co.</title>
+<meta name="theme-color" content="#0A3C46">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E4F5C'/%3E%3Ccircle cx='32' cy='36' r='14' fill='%23F28A3B'/%3E%3Cpath d='M12 44h40v8H12z' fill='%230E4F5C'/%3E%3Cpath d='M18 44l14-12 14 12z' fill='%23FFF8F1'/%3E%3C/svg%3E">
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    min-height: 100vh; min-height: 100dvh;
+    display: grid; place-items: center;
+    background:
+      radial-gradient(120% 80% at 50% 115%, rgba(242,138,59,.55) 0%, rgba(242,138,59,0) 60%),
+      linear-gradient(180deg, #0A3C46 0%, #0E4F5C 60%, #13606B 100%);
+    color: #FFF8F1;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    text-align: center; overflow-x: hidden;
+  }
+  main { display: grid; justify-items: center; gap: clamp(14px, 3vmin, 28px); padding: 4vmin; }
+  .brand { display: flex; align-items: center; gap: 12px; font: 700 clamp(18px, 3.2vmin, 30px)/1 ui-serif, "Iowan Old Style", Palatino, Georgia, serif; letter-spacing: -.01em; }
+  .qr {
+    width: min(58vmin, 640px); aspect-ratio: 1; background: #fff; border-radius: clamp(14px, 2.4vmin, 28px);
+    padding: clamp(10px, 1.6vmin, 18px); box-shadow: 0 20px 60px rgba(0,0,0,.35), 0 0 0 clamp(6px, 1vmin, 10px) #F28A3B;
+    display: grid; place-items: center;
+  }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .qr .fallback { color: #0A3C46; font-weight: 600; padding: 12px; font-size: clamp(14px, 2.4vmin, 22px); word-break: break-all; }
+  h1 { margin: 0; font: 800 clamp(26px, 5.6vmin, 64px)/1.08 ui-serif, "Iowan Old Style", Palatino, Georgia, serif; letter-spacing: -.02em; max-width: 18ch; }
+  h1 span { color: #F7A55E; }
+  .url { margin: 0; font-size: clamp(14px, 2.4vmin, 24px); opacity: .9; font-weight: 600; letter-spacing: .01em; word-break: break-all; }
+  .foot { margin: 0; font-size: clamp(11px, 1.6vmin, 15px); opacity: .7; }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#FFF8F1"/><circle cx="32" cy="36" r="14" fill="#F28A3B"/><path d="M12 44h40v8H12z" fill="#0E4F5C"/><path d="M18 44l14-12 14 12z" fill="#0E4F5C"/></svg>
+    <span>Austin Co-Host Co.</span>
+  </div>
+  <div class="qr" id="qr" role="img" aria-label="QR code that opens the booking site"></div>
+  <h1>Book a stay. <span>Bots reply in minutes.</span></h1>
+  <p class="url" id="url"></p>
+  <p class="foot">Demo built at the Grok Bot Hackathon Austin. Test mode only, no real bookings.</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  // Points at index.html in the same folder: window.location.origin + this folder's path.
+  // Works at the domain root (/qr.html -> /) and in a subfolder (/cohost/qr.html -> /cohost/).
+  var dir = window.location.pathname.replace(/[^/]*$/, "");
+  var target = window.location.origin + dir;
+  var prop = new URLSearchParams(window.location.search).get("property");
+  if (prop && /^[a-z0-9_-]{1,32}$/i.test(prop)) target += "?property=" + encodeURIComponent(prop.toLowerCase());
+
+  var box = document.getElementById("qr");
+  document.getElementById("url").textContent = target.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+  function render() {
+    if (typeof window.qrcode !== "function") return fail();
+    var qr = window.qrcode(0, "M");
+    qr.addData(target);
+    qr.make();
+    var n = qr.getModuleCount(), q = 4, size = n + q * 2, d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + (c + q) + " " + (r + q) + "h1v1h-1z";
+    box.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + " " + size + '" shape-rendering="crispEdges" aria-hidden="true">' +
+      '<rect width="' + size + '" height="' + size + '" fill="#fff"/><path d="' + d + '" fill="#0A2A31"/></svg>';
+    box.setAttribute("aria-label", "QR code that opens " + target);
+  }
+  function fail() {
+    box.innerHTML = '<p class="fallback">Couldn\'t load the QR code. Visit ' + target.replace(/[<>&"]/g, "") + "</p>";
+  }
+
+  // Small QR library from cdnjs, with jsDelivr as a backup.
+  var sources = [
+    "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js",
+    "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+  ];
+  (function load(i) {
+    if (typeof window.qrcode === "function") return render();
+    if (i >= sources.length) return fail();
+    var s = document.createElement("script");
+    s.src = sources[i]; s.async = true; s.crossOrigin = "anonymous"; s.referrerPolicy = "no-referrer";
+    s.onload = function () { typeof window.qrcode === "function" ? render() : load(i + 1); };
+    s.onerror = function () { load(i + 1); };
+    document.head.appendChild(s);
+  })(0);
+
+  // Keep the second screen awake while this page is showing (where supported).
+  function wake() { try { if ("wakeLock" in navigator && document.visibilityState === "visible") navigator.wakeLock.request("screen").catch(function () {}); } catch (_) {} }
+  wake(); document.addEventListener("visibilitychange", wake);
+})();
+</script>
+</body>
+</html>
