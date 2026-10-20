@@ -3,7 +3,7 @@
    Times use 24-hour "HH:MM" (e.g. "16:00" = 4 PM); the page formats them.
    Never put door codes, wifi passwords or street addresses in here.
    ===================================================================== */
-const CONCIERGE_EMAIL = "REPLACE_ME@example.com";
+const CONCIERGE_EMAIL = "bnbmanager@mail.grokbot.com";
 const BRAND = "Austin Co-Host Co.";
 const DEFAULT_PROPERTY = "zilker";
 
