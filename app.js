@@ -4,7 +4,7 @@
    Never put door codes, wifi passwords or street addresses in here.
    ===================================================================== */
 // Every form emails all of these addresses (all on the To: line).
-const CONCIERGE_EMAILS = ["grok@thomasrohan.com", "bnbmanager@mail.grokbot.com"];
+const CONCIERGE_EMAILS = ["bnbmanager@thomasrohan.com"];
 const BRAND = "Austin Co-Host Co.";
 const DEFAULT_PROPERTY = "zilker";
 
