@@ -32,7 +32,7 @@ a:hover { color: var(--teal-700); }
 .skip { position: absolute; left: 12px; top: -60px; background: var(--teal); color: #fff; padding: 10px 14px; border-radius: 10px; z-index: 50; }
 .skip:focus { top: 12px; color: #fff; }
 
-/* Setup banner (only shows while CONCIERGE_EMAIL is the placeholder) */
+/* Setup banner (only shows while CONCIERGE_EMAILS has the placeholder) */
 .setup { background: #FFF1C2; color: #5A4300; font-size: 14px; padding: 8px 16px; text-align: center; }
 .setup code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 4px; }
 
@@ -151,7 +151,7 @@ fieldset[aria-invalid="true"] .choice span { border-color: var(--err); }
 .confirm .okdot { width: 28px; height: 28px; flex: none; border-radius: 50%; background: #E3F3EA; color: var(--ok); display: grid; place-items: center; }
 .confirm p { margin: 0; }
 .to-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--teal-soft); border-radius: 12px; padding: 10px 12px; }
-.to-line strong { word-break: break-all; }
+.to-line strong { overflow-wrap: anywhere; line-height: 1.5; }
 .msg { margin: 0; background: #FBF7F2; border: 1px dashed #CDBFB1; border-radius: 12px; padding: 12px; font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-word; max-height: 300px; overflow: auto; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .status { font-size: 14px; color: var(--ok); font-weight: 600; min-height: 1px; margin: 0; }

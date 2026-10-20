@@ -3,7 +3,8 @@
    Times use 24-hour "HH:MM" (e.g. "16:00" = 4 PM); the page formats them.
    Never put door codes, wifi passwords or street addresses in here.
    ===================================================================== */
-const CONCIERGE_EMAIL = "bnbmanager@mail.grokbot.com";
+// Every form emails all of these addresses (all on the To: line).
+const CONCIERGE_EMAILS = ["grok@thomasrohan.com", "bnbmanager@mail.grokbot.com"];
 const BRAND = "Austin Co-Host Co.";
 const DEFAULT_PROPERTY = "zilker";
 
@@ -84,6 +85,8 @@ const PROPERTIES = {
   const oneLine = (s) => String(s || "").replace(/\s+/g, " ").trim();
   const multiLine = (s) => String(s || "").trim().replace(/\s*[\r\n]+\s*/g, " / ").replace(/[ \t]+/g, " ");
   const money = (n) => "$" + Number(n).toLocaleString("en-US");
+  const TO_MAILTO = CONCIERGE_EMAILS.join(",");
+  const TO_DISPLAY = CONCIERGE_EMAILS.join(", ");
   const EMAIL_RE = /^[^\s@<>(),;:"\[\]]+@[^\s@<>(),;:"\[\]]+\.[A-Za-z]{2,}$/;
 
   function fmtTime(hhmm) {
@@ -216,11 +219,11 @@ const PROPERTIES = {
   $("#stays").querySelectorAll(".stay-art svg").forEach((s) => s.setAttribute("aria-hidden", "true"));
 
   // Setup banner while the placeholder email is still in place
-  if (/REPLACE_ME/i.test(CONCIERGE_EMAIL)) {
+  if (CONCIERGE_EMAILS.some((e) => /REPLACE_ME/i.test(e))) {
     const b = $("#setup-banner");
-    b.innerHTML = "Setup: set <code>CONCIERGE_EMAIL</code> at the top of app.js.";
+    b.innerHTML = "Setup: set <code>CONCIERGE_EMAILS</code> at the top of app.js.";
     b.hidden = false;
-    console.warn("CONCIERGE_EMAIL is still the placeholder.");
+    console.warn("CONCIERGE_EMAILS still has the placeholder.");
   }
 
   // ---------- open the right card from CTA / hash ----------
@@ -366,7 +369,7 @@ const PROPERTIES = {
       `Sent from: ${BRAND} booking site`
     ];
     const body = lines.join("\n");
-    const href = `mailto:${CONCIERGE_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\r\n"))}`;
+    const href = `mailto:${TO_MAILTO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\r\n"))}`;
     return { subject, body, href };
   }
 
@@ -391,7 +394,7 @@ const PROPERTIES = {
         <h3 tabindex="-1"><span class="okdot" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>Opening your email app…</h3>
         <p>Press <strong>Send</strong> in your email app and the Concierge bot will reply in minutes.</p>
         <p class="hint">No email app opened? Copy the message below and send it to:</p>
-        <div class="to-line"><strong data-to></strong><button type="button" class="btn btn-ghost btn-sm" data-copy-addr>Copy address</button></div>
+        <div class="to-line"><strong data-to></strong><button type="button" class="btn btn-ghost btn-sm" data-copy-addr>${CONCIERGE_EMAILS.length > 1 ? "Copy addresses" : "Copy address"}</button></div>
         <pre class="msg" data-msg tabindex="0" aria-label="Full message"></pre>
         <div class="btn-row">
           <button type="button" class="btn btn-teal btn-sm" data-copy-msg>Copy message</button>
@@ -406,19 +409,19 @@ const PROPERTIES = {
         status.textContent = ok ? "Message copied. Paste it into a new email." : "Couldn't copy automatically. Select the text above and copy it.";
       });
       panel.querySelector("[data-copy-addr]").addEventListener("click", async () => {
-        const ok = await copyText(CONCIERGE_EMAIL);
-        status.textContent = ok ? "Email address copied." : "Couldn't copy automatically. Select the address and copy it.";
+        const ok = await copyText(TO_DISPLAY);
+        status.textContent = ok ? (CONCIERGE_EMAILS.length > 1 ? "Email addresses copied." : "Email address copied.") : "Couldn't copy automatically. Select the addresses and copy them.";
       });
       panel.querySelector("[data-back]").addEventListener("click", () => {
         panel.hidden = true; form.hidden = false; status.textContent = "";
         const first = form.querySelector("input, textarea, select"); if (first) first.focus();
       });
     }
-    panel.querySelector("[data-to]").textContent = CONCIERGE_EMAIL;
-    panel.querySelector("[data-msg]").textContent = `To: ${CONCIERGE_EMAIL}\nSubject: ${mail.subject}\n\n${mail.body}`;
+    panel.querySelector("[data-to]").innerHTML = CONCIERGE_EMAILS.map(esc).join("<br>");
+    panel.querySelector("[data-msg]").textContent = `To: ${TO_DISPLAY}\nSubject: ${mail.subject}\n\n${mail.body}`;
     panel.querySelector("[data-reopen]").href = mail.href;
     panel.querySelector("[data-status]").textContent = "";
-    panel.dataset.full = `To: ${CONCIERGE_EMAIL}\nSubject: ${mail.subject}\n\n${mail.body}`;
+    panel.dataset.full = `To: ${TO_DISPLAY}\nSubject: ${mail.subject}\n\n${mail.body}`;
     form.hidden = true;
     panel.hidden = false;
     panel.querySelector("h3").focus({ preventScroll: true });
