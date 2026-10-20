@@ -4,7 +4,7 @@
    Never put door codes, wifi passwords or street addresses in here.
    ===================================================================== */
 // Every form emails all of these addresses (all on the To: line).
-const CONCIERGE_EMAILS = ["bnbmanager@thomasrohan.com"];
+const CONCIERGE_EMAILS = ["rohan+bnbmanager@thomasrohan.com"];
 const BRAND = "Austin Co-Host Co.";
 const DEFAULT_PROPERTY = "zilker";
 
@@ -85,7 +85,7 @@ const PROPERTIES = {
   const oneLine = (s) => String(s || "").replace(/\s+/g, " ").trim();
   const multiLine = (s) => String(s || "").trim().replace(/\s*[\r\n]+\s*/g, " / ").replace(/[ \t]+/g, " ");
   const money = (n) => "$" + Number(n).toLocaleString("en-US");
-  const TO_MAILTO = CONCIERGE_EMAILS.join(",");
+  const TO_MAILTO = CONCIERGE_EMAILS.map((e) => e.replace(/\+/g, "%2B")).join(",");
   const TO_DISPLAY = CONCIERGE_EMAILS.join(", ");
   const EMAIL_RE = /^[^\s@<>(),;:"\[\]]+@[^\s@<>(),;:"\[\]]+\.[A-Za-z]{2,}$/;
 
