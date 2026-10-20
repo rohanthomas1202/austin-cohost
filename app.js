@@ -110,68 +110,106 @@ const PROPERTIES = {
   const P = PROPERTIES[id];
   const TODAY = isoLocal(new Date());
 
-  // ---------- illustration (inline SVG, no photos) ----------
-  const PALETTES = {
-    loft:      { sky: ["#174E5B", "#E57A4A", "#F8C48E"], sun: "#FFD9A6", hill: "#2F6E73", ground: "#0A3C46" },
-    bungalow:  { sky: ["#2E3B66", "#C95A6A", "#F3A85E"], sun: "#FFE2B5", hill: "#4A4F78", ground: "#1E2B45" },
-    casita:    { sky: ["#E9703F", "#F4A26A", "#FCE1BE"], sun: "#FFF2D8", hill: "#C26A45", ground: "#0E4F5C" },
-    townhouse: { sky: ["#6FAEB6", "#CFE2D6", "#FBE6C4"], sun: "#F7A94B", hill: "#5C9A8F", ground: "#0E4F5C" }
+  // ---------- icons (inline SVG, stroke = currentColor via CSS) ----------
+  const ICON = {
+    wifi: '<path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0"/><path d="M8.7 15.9a5 5 0 0 1 6.6 0"/><circle cx="12" cy="19.3" r=".9"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="M10.9 12.1 20 3M16.5 6.5l2.5 2.5M14 9l2 2"/>',
+    pot: '<path d="M4 10h16v5.5A4.5 4.5 0 0 1 15.5 20h-7A4.5 4.5 0 0 1 4 15.5z"/><path d="M2 10h20M9 6.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5"/>',
+    washer: '<rect x="4" y="3" width="16" height="18" rx="2.5"/><circle cx="12" cy="13" r="4.5"/><path d="M7.5 6.5h2"/>',
+    car: '<path d="M4 15.5 5.6 10a2 2 0 0 1 1.9-1.4h9a2 2 0 0 1 1.9 1.4L20 15.5V19h-3v-2H7v2H4z"/><path d="M4 15.5h16"/><circle cx="8" cy="13.4" r=".6"/><circle cx="16" cy="13.4" r=".6"/>',
+    balcony: '<path d="M6 14V9a6 6 0 0 1 12 0v5"/><path d="M3 14h18M5 14v7M9.7 14v7M14.3 14v7M19 14v7M3 21h18"/>',
+    coffee: '<path d="M4 9h13v4.5A5.5 5.5 0 0 1 11.5 19h-2A5.5 5.5 0 0 1 4 13.5z"/><path d="M17 10.5h1.2a2.4 2.4 0 0 1 0 4.8H17M8 3.5v2.5M12 3.5v2.5"/>',
+    swing: '<path d="M3 3h18M7 3v9M17 3v9M5 12h14v3.5H5zM6.5 15.5V19M17.5 15.5V19"/>',
+    umbrella: '<path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 1-4 0"/>',
+    tv: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/>',
+    fence: '<path d="M5 21V7l2-3 2 3v14M15 21V7l2-3 2 3v14M3 10.5h18M3 16.5h18"/>',
+    check: '<path d="M5 12.5 10 17l9-10"/>',
+    people: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.1c2.6.3 4.5 2.6 4.5 5.4"/>',
+    paw: '<circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 11c-3 0-5.5 3.6-5.5 6a2.5 2.5 0 0 0 3.2 2.4c1.5-.4 3.1-.4 4.6 0a2.5 2.5 0 0 0 3.2-2.4c0-2.4-2.5-6-5.5-6z"/>',
+    nopaw: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+    pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>'
   };
-  function buildingSVG(type) {
-    const glow = "#FFD27F", win = "#0E4F5C";
-    if (type === "bungalow") return `
-      <rect x="470" y="252" width="210" height="78" fill="#FFF4E8"/>
-      <polygon points="452,256 575,196 698,256" fill="#9E3912"/>
-      <rect x="470" y="252" width="210" height="8" fill="#7E2C0D" opacity=".35"/>
-      <rect x="492" y="276" width="34" height="30" rx="3" fill="${glow}"/><rect x="624" y="276" width="34" height="30" rx="3" fill="${glow}"/>
-      <rect x="560" y="272" width="30" height="58" rx="3" fill="${win}"/>
-      <rect x="470" y="326" width="210" height="6" fill="#CDBFB1"/>
-      <rect x="538" y="262" width="4" height="66" fill="#E8D8C6"/><rect x="608" y="262" width="4" height="66" fill="#E8D8C6"/>`;
-    if (type === "casita") return `
-      <path d="M490 330 V238 q0 -12 12 -12 h30 q8 0 10 -8 q4 -12 23 -12 q19 0 23 12 q2 8 10 8 h30 q12 0 12 12 V330 Z" fill="#F6D2BB"/>
-      <rect x="500" y="236" width="10" height="6" fill="#8A5A3C"/><rect x="530" y="236" width="10" height="6" fill="#8A5A3C"/><rect x="590" y="236" width="10" height="6" fill="#8A5A3C"/><rect x="620" y="236" width="10" height="6" fill="#8A5A3C"/>
-      <path d="M548 330 v-44 a17 17 0 0 1 34 0 v44 z" fill="${win}"/>
-      <circle cx="565" cy="250" r="10" fill="${glow}"/>
-      <rect x="506" y="268" width="26" height="30" rx="13" fill="${glow}"/><rect x="598" y="268" width="26" height="30" rx="13" fill="${glow}"/>
-      <path d="M472 300 q46 -16 92 -6 q46 10 102 -4" fill="none" stroke="#FFF2D8" stroke-width="1.5" stroke-dasharray="2 9" stroke-linecap="round"/>`;
-    if (type === "townhouse") return `
-      <rect x="452" y="214" width="82" height="116" fill="#FFF4E8"/><polygon points="446,216 493,184 540,216" fill="#0E4F5C"/>
-      <rect x="534" y="200" width="82" height="130" fill="#F8DCC7"/><polygon points="528,202 575,168 622,202" fill="#C2491D"/>
-      <rect x="616" y="220" width="82" height="110" fill="#E3EFEC"/><polygon points="610,222 657,192 704,222" fill="#0A3C46"/>
-      <rect x="468" y="236" width="20" height="24" rx="2" fill="${glow}"/><rect x="498" y="236" width="20" height="24" rx="2" fill="${win}"/><rect x="480" y="290" width="24" height="40" rx="2" fill="${win}"/>
-      <rect x="550" y="222" width="20" height="24" rx="2" fill="${win}"/><rect x="580" y="222" width="20" height="24" rx="2" fill="${glow}"/><rect x="562" y="290" width="24" height="40" rx="2" fill="${win}"/>
-      <rect x="632" y="242" width="20" height="24" rx="2" fill="${glow}"/><rect x="662" y="242" width="20" height="24" rx="2" fill="${glow}"/><rect x="644" y="290" width="24" height="40" rx="2" fill="${win}"/>`;
-    // loft
-    return `
-      <rect x="486" y="176" width="168" height="154" fill="#FFF4E8"/>
-      <rect x="476" y="166" width="188" height="14" rx="3" fill="#0E4F5C"/>
-      <rect x="502" y="196" width="40" height="44" rx="3" fill="${glow}"/><rect x="550" y="196" width="40" height="44" rx="3" fill="${win}"/><rect x="598" y="196" width="40" height="44" rx="3" fill="${glow}"/>
-      <rect x="502" y="252" width="40" height="44" rx="3" fill="${win}"/><rect x="598" y="252" width="40" height="44" rx="3" fill="${win}"/>
-      <rect x="553" y="270" width="34" height="60" rx="3" fill="#C2491D"/>
-      <rect x="494" y="240" width="152" height="6" fill="#0E4F5C" opacity=".85"/>`;
+  const svgIcon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[name] || ICON.check}</svg>`;
+  function amenityIcon(a) {
+    const s = a.toLowerCase();
+    if (/wi-?fi|internet/.test(s)) return "wifi";
+    if (/check-?in|keyless|lock/.test(s)) return "key";
+    if (/coffee|espresso/.test(s)) return "coffee";
+    if (/kitchen/.test(s)) return "pot";
+    if (/washer|dryer|laundry/.test(s)) return "washer";
+    if (/parking|garage/.test(s)) return "car";
+    if (/balcony/.test(s)) return "balcony";
+    if (/swing|porch/.test(s)) return "swing";
+    if (/fence/.test(s)) return "fence";
+    if (/patio|yard|deck|garden/.test(s)) return "umbrella";
+    if (/\btv\b|television/.test(s)) return "tv";
+    return "check";
   }
-  function sceneSVG(type, uid, label) {
-    const c = PALETTES[type] || PALETTES.loft;
-    return `<svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(label)}">
-      <defs>
-        <linearGradient id="sky-${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.sky[0]}"/><stop offset=".55" stop-color="${c.sky[1]}"/><stop offset="1" stop-color="${c.sky[2]}"/></linearGradient>
-        <radialGradient id="glow-${uid}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="${c.sun}" stop-opacity=".75"/><stop offset="1" stop-color="${c.sun}" stop-opacity="0"/></radialGradient>
-      </defs>
-      <rect width="800" height="400" fill="url(#sky-${uid})"/>
-      <circle cx="300" cy="262" r="150" fill="url(#glow-${uid})"/>
-      <circle cx="300" cy="262" r="62" fill="${c.sun}"/>
-      <path d="M0 292 C120 258 230 276 330 262 S560 236 800 272 V400 H0Z" fill="${c.hill}" opacity=".55"/>
-      <g fill="${c.ground}" opacity=".38">
-        <rect x="70" y="232" width="26" height="70"/><rect x="100" y="214" width="20" height="88"/><rect x="124" y="244" width="30" height="58"/>
-        <rect x="160" y="200" width="18" height="102"/><rect x="182" y="226" width="26" height="76"/><rect x="740" y="236" width="24" height="70"/><rect x="706" y="250" width="30" height="56"/>
+
+  // ---------- illustration: Austin skyline at dusk (inline SVG, no photos) ----------
+  // Sky colors per property, top of the sky to the horizon.
+  const SKIES = {
+    loft:      ["#0A3238", "#2C6A70", "#EE7A57", "#FF9446", "#FFD08A"],
+    bungalow:  ["#152B4A", "#5A4170", "#E8616B", "#FF8A4C", "#FFC77D"],
+    casita:    ["#0A3238", "#8E4A55", "#FF6B4A", "#FF8E3C", "#FFD27A"],
+    townhouse: ["#13525B", "#5D9C9C", "#F4A57B", "#FFB061", "#FFE1A0"]
+  };
+  function skyVars(art) {
+    const s = SKIES[art] || SKIES.loft;
+    return s.map((c, i) => `--s${i + 1}:${c}`).join(";");
+  }
+  function buildingSVG(type, bx) {
+    const ink = "#0A3238", lit = "#FFC46B";
+    const g = (inner) => `<g transform="translate(${bx} 0)" fill="${ink}">${inner}</g>`;
+    if (type === "bungalow") return g(`
+      <rect x="10" y="176" width="150" height="60"/>
+      <polygon points="-6,182 85,128 176,182"/>
+      <rect x="0" y="182" width="170" height="6"/>
+      <rect x="28" y="196" width="26" height="22" rx="2" fill="${lit}"/><rect x="116" y="196" width="26" height="22" rx="2" fill="${lit}"/>
+      <rect x="73" y="192" width="24" height="44" rx="2" fill="${lit}" opacity=".85"/>
+      <rect x="130" y="140" width="12" height="26"/>`);
+    if (type === "casita") return g(`
+      <path d="M0 236V158q0-10 10-10h26q7 0 9-7 4-11 25-11t25 11q2 7 9 7h26q10 0 10 10v78z"/>
+      <path d="M58 236v-34a12 12 0 0 1 24 0v34z" fill="${lit}" opacity=".85"/>
+      <circle cx="70" cy="160" r="8" fill="${lit}"/>
+      <rect x="16" y="182" width="20" height="26" rx="10" fill="${lit}"/><rect x="104" y="182" width="20" height="26" rx="10" fill="${lit}"/>
+      <path d="M-30 196q50-14 100-5t110-4" fill="none" stroke="${lit}" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round"/>`);
+    if (type === "townhouse") return g(`
+      <rect x="0" y="150" width="62" height="86"/><polygon points="-5,152 31,124 67,152"/>
+      <rect x="62" y="136" width="62" height="100"/><polygon points="57,138 93,108 129,138"/>
+      <rect x="124" y="156" width="62" height="80"/><polygon points="119,158 155,132 191,158"/>
+      <rect x="12" y="166" width="14" height="18" rx="1.5" fill="${lit}"/><rect x="36" y="166" width="14" height="18" rx="1.5" fill="${lit}" opacity=".55"/>
+      <rect x="74" y="152" width="14" height="18" rx="1.5" fill="${lit}" opacity=".55"/><rect x="98" y="152" width="14" height="18" rx="1.5" fill="${lit}"/>
+      <rect x="136" y="172" width="14" height="18" rx="1.5" fill="${lit}"/><rect x="160" y="172" width="14" height="18" rx="1.5" fill="${lit}"/>
+      <rect x="84" y="200" width="18" height="36" rx="1.5" fill="${lit}" opacity=".8"/>`);
+    // loft
+    return g(`
+      <rect x="0" y="132" width="150" height="104"/>
+      <rect x="-8" y="124" width="166" height="12" rx="3"/>
+      <rect x="16" y="150" width="30" height="30" rx="2" fill="${lit}"/><rect x="60" y="150" width="30" height="30" rx="2" fill="${lit}" opacity=".55"/><rect x="104" y="150" width="30" height="30" rx="2" fill="${lit}"/>
+      <rect x="16" y="194" width="30" height="30" rx="2" fill="${lit}" opacity=".55"/><rect x="104" y="194" width="30" height="30" rx="2" fill="${lit}" opacity=".55"/>
+      <rect x="62" y="196" width="26" height="40" rx="2" fill="${lit}" opacity=".9"/>
+      <rect x="8" y="186" width="134" height="4"/>`);
+  }
+  function horizonSVG(art, opts) {
+    const o = opts || {};
+    const bx = o.bx == null ? 930 : o.bx;
+    return `<svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <path d="M0 196C150 170 300 186 450 176S760 150 900 168s200-8 300 4V300H0z" fill="#0A3238" opacity=".2"/>
+      <g fill="#0A3238">
+        <rect x="150" y="150" width="34" height="100"/><rect x="190" y="118" width="28" height="130"/>
+        <path d="M222 250V110h12V96h14v14h12v140z"/><rect x="266" y="136" width="30" height="114"/>
+        <path d="M300 250V82l13-10 13 10v168z"/><rect x="312" y="44" width="2" height="30"/>
+        <rect x="330" y="124" width="40" height="126"/><rect x="376" y="148" width="28" height="102"/>
+        <path d="M410 250V112l17-8 17 8v138z"/><rect x="450" y="162" width="30" height="88"/>
+        <rect x="560" y="208" width="120" height="42"/><rect x="588" y="186" width="64" height="24"/>
+        <path d="M592 188q28-56 56 0z"/><rect x="616" y="118" width="8" height="24"/><circle cx="620" cy="116" r="4"/>
+        <ellipse cx="70" cy="214" rx="66" ry="30"/><ellipse cx="34" cy="204" rx="38" ry="22"/><ellipse cx="108" cy="202" rx="40" ry="24"/>
+        <ellipse cx="760" cy="222" rx="52" ry="24"/><ellipse cx="734" cy="212" rx="30" ry="18"/>
+        <ellipse cx="1150" cy="216" rx="60" ry="28"/><ellipse cx="1112" cy="206" rx="34" ry="20"/>
       </g>
-      <path d="M0 330 C210 312 450 324 800 306 V400 H0Z" fill="${c.ground}"/>
-      <g>
-        <rect x="150" y="286" width="9" height="46" fill="#3B2A20"/>
-        <ellipse cx="154" cy="282" rx="58" ry="26" fill="#1F5A4A"/><ellipse cx="124" cy="270" rx="34" ry="20" fill="#2A6B57"/><ellipse cx="186" cy="268" rx="36" ry="21" fill="#2A6B57"/>
-      </g>
-      ${buildingSVG(type)}
-      <path d="M0 352 C220 340 520 350 800 334 V400 H0Z" fill="#0A2E36" opacity=".55"/>
+      ${buildingSVG(art, bx)}
+      <path d="M0 232C200 224 420 230 600 226S1000 220 1200 228V300H0z" fill="#0A3238"/>
     </svg>`;
   }
 
@@ -180,24 +218,28 @@ const PROPERTIES = {
   document.querySelectorAll("[data-brand]").forEach((el) => { el.textContent = BRAND; });
   $(".brand").setAttribute("aria-label", `${BRAND} home`);
 
-  $("#hero").innerHTML = sceneSVG(P.art, "hero", `Illustration of ${P.name} in ${P.neighborhood}, Austin`) +
-    `<span class="hero-chip">${esc(P.neighborhood)} · Austin, TX</span><span class="hero-note">Illustration</span>`;
-  $("#eyebrow").textContent = `${P.neighborhood} · Austin`;
-  $("#title").textContent = P.name;
+  const hero = $("#hero");
+  hero.setAttribute("style", skyVars(P.art));
+  $("#title").innerHTML = P.name.split(/\s+/).map((w) => `<span class="w">${esc(w)}</span>`).join(" ");
+  $("#horizon").innerHTML = horizonSVG(P.art);
+  $("#hero-place").innerHTML = `${svgIcon("pin")}<span>${esc(P.neighborhood)}, Austin, Texas</span>`;
+
   $("#price").textContent = money(P.nightly);
-  $("#meta").innerHTML = [
-    `Up to ${P.maxGuests} guests`,
-    P.petsAllowed ? `Pets OK (${money(P.petFee)} fee)` : "No pets",
-    "Self check-in"
-  ].map((t) => `<li>${esc(t)}</li>`).join("");
+  $("#quick").innerHTML = [
+    ["people", `Sleeps ${P.maxGuests}`],
+    P.petsAllowed ? ["paw", `Pets OK, ${money(P.petFee)} fee`] : ["nopaw", "No pets"],
+    ["key", "Self check-in"]
+  ].map(([i, t]) => `<li>${svgIcon(i)}${esc(t)}</li>`).join("");
+
   $("#facts").innerHTML = [
     ["Check-in", fmtTime(P.checkIn), ""],
     ["Checkout", fmtTime(P.checkOut), ""],
     ["Early check-in", `From ${fmtTime(P.earlyCheckInFrom)}`, `${money(P.earlyFee)} fee`],
     ["Late checkout", `After ${fmtTime(P.checkOut)}`, `${money(P.lateFee)} fee`]
-  ].map(([k, v, s]) => `<div class="fact"><dt>${esc(k)}</dt><dd>${esc(v)}${s ? `<small>${esc(s)}</small>` : ""}</dd></div>`).join("");
+  ].map(([k, v, s]) => `<div class="time"><dt>${esc(k)}</dt><dd>${esc(v)}${s ? `<small>${esc(s)}</small>` : ""}</dd></div>`).join("");
+
   $("#description").textContent = P.description;
-  $("#amenities").innerHTML = P.amenities.slice(0, 6).map((a) => `<li>${esc(a)}</li>`).join("");
+  $("#amenities").innerHTML = P.amenities.slice(0, 6).map((a) => `<li><span class="ico">${svgIcon(amenityIcon(a))}</span>${esc(a)}</li>`).join("");
   $("#rules").innerHTML = [
     `Up to ${P.maxGuests} guests`,
     P.petsAllowed ? `Pets welcome, ${money(P.petFee)} pet fee` : "No pets",
@@ -207,16 +249,21 @@ const PROPERTIES = {
     `Check-in after ${fmtTime(P.checkIn)}, checkout by ${fmtTime(P.checkOut)}`
   ].map((r) => `<li>${esc(r)}</li>`).join("");
 
-  // Other stays
+  // Other stays: mini dusk scenes
   $("#stays").innerHTML = Object.keys(PROPERTIES).filter((k) => k !== id).map((k) => {
     const o = PROPERTIES[k];
-    return `<a class="card stay" href="?property=${encodeURIComponent(k)}">
-      <span class="stay-art" aria-hidden="true">${sceneSVG(o.art, "s-" + k, o.name)}</span>
-      <span class="stay-text"><span class="stay-name">${esc(o.name)}</span>
-      <span class="stay-meta">${esc(o.neighborhood)} · up to ${o.maxGuests} guests${o.petsAllowed ? " · pets OK" : ""}</span>
-      <span class="stay-price">${money(o.nightly)} / night</span></span></a>`;
+    return `<a class="stay" href="?property=${encodeURIComponent(k)}">
+      <div class="mini" style="${skyVars(o.art)}" aria-hidden="true">
+        <div class="sky"></div><div class="mini-sun"></div>
+        <p class="mini-name">${o.name.split(/\s+/).map((w) => `<span>${esc(w)}</span>`).join("")}</p>
+        <div class="horizon">${horizonSVG(o.art, { bx: 640 })}</div>
+      </div>
+      <div class="stay-info">
+        <span class="sr-only">${esc(o.name)}, </span>
+        <span class="stay-meta">${esc(o.neighborhood)}, sleeps ${o.maxGuests}${o.petsAllowed ? ", pets OK" : ""}</span>
+        <span class="stay-price">${money(o.nightly)} per night</span>
+      </div></a>`;
   }).join("");
-  $("#stays").querySelectorAll(".stay-art svg").forEach((s) => s.setAttribute("aria-hidden", "true"));
 
   // Setup banner while the placeholder email is still in place
   if (CONCIERGE_EMAILS.some((e) => /REPLACE_ME/i.test(e))) {
@@ -226,13 +273,73 @@ const PROPERTIES = {
     console.warn("CONCIERGE_EMAILS still has the placeholder.");
   }
 
-  // ---------- open the right card from CTA / hash ----------
-  function openCard(cardId) {
-    const d = document.getElementById(cardId);
-    if (d && d.tagName === "DETAILS") d.open = true;
+  // ---------- hero name: fit the property name to the width, like a gig poster ----------
+  const measurer = document.createElement("span");
+  measurer.className = "marquee marquee-measure";
+  measurer.setAttribute("aria-hidden", "true");
+  document.body.appendChild(measurer);
+  function fitName() {
+    const h1 = $("#title"), box = $(".hero-type");
+    const cs = getComputedStyle(box);
+    const W = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    h1.style.fontSize = "10px";
+    const availH = hero.clientHeight - $("#topbar").offsetHeight - $("#horizon").clientHeight * 0.5 - 28;
+    measurer.style.fontSize = "100px";
+    const width = (t) => { measurer.textContent = t; return measurer.getBoundingClientRect().width || 1; };
+    const words = P.name.split(/\s+/);
+    const widest = Math.max(...words.map(width));
+    const full = width(words.join(" "));
+    const LH = 0.86;
+    const fsStack = Math.min((100 * W) / widest, availH / (words.length * LH));
+    const fsLine = Math.min((100 * W) / full, availH / LH);
+    const stack = fsStack > fsLine;
+    const fs = Math.max(40, Math.min(stack ? fsStack : fsLine, 300)) * 0.98;
+    h1.classList.toggle("stack", stack);
+    h1.style.fontSize = fs.toFixed(1) + "px";
   }
-  document.querySelectorAll("[data-open]").forEach((a) => a.addEventListener("click", () => openCard(a.getAttribute("data-open"))));
-  if (location.hash) openCard(location.hash.slice(1));
+  fitName();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitName);
+  let fitRaf = 0;
+  window.addEventListener("resize", () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitName); });
+
+  // ---------- top bar turns solid after the hero ----------
+  const topbar = $("#topbar");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => topbar.classList.toggle("solid", !e.isIntersecting), { rootMargin: "-64px 0px 0px 0px" }).observe(hero);
+  } else {
+    topbar.classList.add("solid");
+  }
+
+  // ---------- tabs ----------
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+  const PANELS = tabs.map((t) => t.getAttribute("aria-controls"));
+  function selectTab(panelId, focus) {
+    tabs.forEach((t) => {
+      const on = t.getAttribute("aria-controls") === panelId;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+      if (on && focus) t.focus();
+    });
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => selectTab(t.getAttribute("aria-controls")));
+    t.addEventListener("keydown", (e) => {
+      let j = null;
+      if (e.key === "ArrowRight") j = (i + 1) % tabs.length;
+      else if (e.key === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === "Home") j = 0;
+      else if (e.key === "End") j = tabs.length - 1;
+      if (j !== null) { e.preventDefault(); selectTab(PANELS[j], true); }
+    });
+  });
+  document.querySelectorAll("[data-tab]").forEach((a) => a.addEventListener("click", () => selectTab(a.getAttribute("data-tab"))));
+  function openFromHash() {
+    const h = location.hash.slice(1);
+    if (PANELS.includes(h)) { selectTab(h); requestAnimationFrame(() => $("#plan").scrollIntoView()); }
+  }
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
 
   // ---------- form setup ----------
   // Booking: dates + guests
@@ -386,18 +493,22 @@ const PROPERTIES = {
   }
 
   function showConfirmation(form, mail) {
+    const many = CONCIERGE_EMAILS.length > 1;
     let panel = form.parentNode.querySelector(".confirm");
     if (!panel) {
       panel = document.createElement("div");
       panel.className = "confirm";
       panel.innerHTML = `
-        <h3 tabindex="-1"><span class="okdot" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>Opening your email app…</h3>
-        <p>Press <strong>Send</strong> in your email app and the Concierge bot will reply in minutes.</p>
-        <p class="hint">No email app opened? Copy the message below and send it to:</p>
-        <div class="to-line"><strong data-to></strong><button type="button" class="btn btn-ghost btn-sm" data-copy-addr>${CONCIERGE_EMAILS.length > 1 ? "Copy addresses" : "Copy address"}</button></div>
-        <pre class="msg" data-msg tabindex="0" aria-label="Full message"></pre>
+        <h3 tabindex="-1"><span class="okdot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>Opening your email app…</h3>
+        <p>Press <strong>Send</strong> in your email app and the Concierge will reply in minutes.</p>
+        <div class="draft">
+          <div class="draft-row"><span class="k">To</span><span class="v" data-to></span><button type="button" class="link-btn" data-copy-addr>${many ? "Copy addresses" : "Copy address"}</button></div>
+          <div class="draft-row"><span class="k">Subject</span><span class="v" data-subject></span></div>
+          <pre class="draft-body" data-msg tabindex="0" aria-label="Message body"></pre>
+        </div>
+        <p class="hint">No email app opened? Copy the message and send it to the address above.</p>
         <div class="btn-row">
-          <button type="button" class="btn btn-teal btn-sm" data-copy-msg>Copy message</button>
+          <button type="button" class="btn btn-dark btn-sm" data-copy-msg>Copy message</button>
           <a class="btn btn-ghost btn-sm" data-reopen href="#">Open email again</a>
           <button type="button" class="btn btn-ghost btn-sm" data-back>Edit or send another</button>
         </div>
@@ -410,18 +521,21 @@ const PROPERTIES = {
       });
       panel.querySelector("[data-copy-addr]").addEventListener("click", async () => {
         const ok = await copyText(TO_DISPLAY);
-        status.textContent = ok ? (CONCIERGE_EMAILS.length > 1 ? "Email addresses copied." : "Email address copied.") : "Couldn't copy automatically. Select the addresses and copy them.";
+        status.textContent = ok ? (many ? "Email addresses copied." : "Email address copied.") : "Couldn't copy automatically. Select the address and copy it.";
       });
       panel.querySelector("[data-back]").addEventListener("click", () => {
         panel.hidden = true; form.hidden = false; status.textContent = "";
+        const head = form.parentNode.querySelector(".panel-head"); if (head) head.hidden = false;
         const first = form.querySelector("input, textarea, select"); if (first) first.focus();
       });
     }
     panel.querySelector("[data-to]").innerHTML = CONCIERGE_EMAILS.map(esc).join("<br>");
-    panel.querySelector("[data-msg]").textContent = `To: ${TO_DISPLAY}\nSubject: ${mail.subject}\n\n${mail.body}`;
+    panel.querySelector("[data-subject]").textContent = mail.subject;
+    panel.querySelector("[data-msg]").textContent = mail.body;
     panel.querySelector("[data-reopen]").href = mail.href;
     panel.querySelector("[data-status]").textContent = "";
     panel.dataset.full = `To: ${TO_DISPLAY}\nSubject: ${mail.subject}\n\n${mail.body}`;
+    const head = form.parentNode.querySelector(".panel-head"); if (head) head.hidden = true;
     form.hidden = true;
     panel.hidden = false;
     panel.querySelector("h3").focus({ preventScroll: true });

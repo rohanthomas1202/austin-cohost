@@ -5,85 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Austin Co-Host Co.</title>
 <meta name="description" content="Book a short-term stay in Austin directly with Austin Co-Host Co. Our bots reply in minutes, 24/7.">
-<meta name="theme-color" content="#0E4F5C">
+<meta name="theme-color" content="#0A3238">
 <meta name="referrer" content="no-referrer">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E4F5C'/%3E%3Ccircle cx='32' cy='36' r='14' fill='%23F28A3B'/%3E%3Cpath d='M12 44h40v8H12z' fill='%230E4F5C'/%3E%3Cpath d='M18 44l14-12 14 12z' fill='%23FFF8F1'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A3238'/%3E%3Ccircle cx='32' cy='38' r='15' fill='%23FF6B2C'/%3E%3Crect x='10' y='40' width='44' height='14' fill='%230A3238'/%3E%3Crect x='10' y='39' width='44' height='2.5' rx='1.2' fill='%23FFC46B'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<a class="skip" href="#actions">Skip to booking forms</a>
+<a class="skip" href="#plan">Skip to booking forms</a>
 <div id="setup-banner" class="setup" hidden></div>
 
-<header class="site-header">
-  <div class="wrap">
+<header class="topbar" id="topbar">
+  <div class="wrap topbar-in">
     <a class="brand" href="./" aria-label="Austin Co-Host Co. home">
-      <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0E4F5C"/><circle cx="32" cy="36" r="14" fill="#F28A3B"/><path d="M12 44h40v8H12z" fill="#0E4F5C"/><path d="M18 44l14-12 14 12z" fill="#FFF8F1"/></svg>
+      <svg class="brand-mark" width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" opacity=".14"/><circle cx="32" cy="38" r="15" fill="#FF6B2C"/><rect x="10" y="40" width="44" height="14" fill="#0A3238"/><rect x="10" y="39" width="44" height="2.5" rx="1.2" fill="#FFC46B"/></svg>
       <span class="brand-name" data-brand>Austin Co-Host Co.</span>
     </a>
-    <span class="badge"><span class="dot" aria-hidden="true"></span>Replies in minutes, 24/7</span>
+    <span class="live"><span class="live-dot" aria-hidden="true"></span>Replies in minutes, 24/7</span>
   </div>
 </header>
 
-<main id="main" class="wrap">
-  <noscript><p class="setup">This booking site needs JavaScript to build your email. You can also email the Concierge directly.</p></noscript>
+<main id="main">
+  <noscript><p class="setup">This booking site needs JavaScript to build your email.</p></noscript>
 
-  <div class="hero" id="hero"></div>
-
-  <div class="listing-head">
-    <div>
-      <p class="eyebrow" id="eyebrow"></p>
-      <h1 id="title"></h1>
-      <ul class="meta" id="meta"></ul>
+  <!-- Hero: the property name set like a gig poster, sinking behind the Austin skyline at dusk -->
+  <section class="hero" id="hero" aria-labelledby="title">
+    <div class="sky" aria-hidden="true"></div>
+    <div class="sun" aria-hidden="true"></div>
+    <svg class="bats" viewBox="0 0 160 70" aria-hidden="true"><use href="#bat" x="10" y="38" width="16" height="7"/><use href="#bat" x="34" y="26" width="13" height="6"/><use href="#bat" x="52" y="40" width="11" height="5"/><use href="#bat" x="66" y="18" width="15" height="7"/><use href="#bat" x="88" y="30" width="10" height="5"/><use href="#bat" x="100" y="12" width="12" height="5"/><use href="#bat" x="118" y="24" width="9" height="4"/><use href="#bat" x="130" y="8" width="11" height="5"/><use href="#bat" x="146" y="18" width="8" height="4"/></svg>
+    <div class="wrap hero-type">
+      <h1 class="marquee" id="title"></h1>
     </div>
-    <div class="price-row">
-      <span class="price"><strong id="price"></strong> / night</span>
-      <a class="btn btn-primary" href="#book" data-open="book">Request to book</a>
+    <div class="horizon" id="horizon" aria-hidden="true"></div>
+    <p class="hero-place" id="hero-place"></p>
+    <div class="grain" aria-hidden="true"></div>
+  </section>
+
+  <section class="wrap intro" aria-label="Price and quick facts">
+    <p class="price"><span class="price-num" id="price"></span><span class="price-unit">per night</span></p>
+    <ul class="quick" id="quick"></ul>
+    <div class="cta-row">
+      <a class="btn btn-sun" href="#plan" data-tab="book">Request to book</a>
+      <a class="btn btn-line" href="#plan" data-tab="message">Ask a question</a>
     </div>
-  </div>
+  </section>
 
-  <dl class="facts" id="facts"></dl>
+  <section class="wrap times" aria-label="Check-in and checkout times">
+    <dl class="times-grid" id="facts"></dl>
+  </section>
 
-  <section aria-labelledby="about-h">
+  <section class="wrap about" aria-labelledby="about-h">
     <h2 id="about-h">About this stay</h2>
     <p class="lede" id="description"></p>
+    <div class="about-cols">
+      <div>
+        <h3>What's here</h3>
+        <ul class="amenities" id="amenities"></ul>
+      </div>
+      <div>
+        <h3>House rules</h3>
+        <ul class="rules" id="rules"></ul>
+      </div>
+    </div>
   </section>
 
-  <section class="two-col">
-    <div>
-      <h2>Amenities</h2>
-      <ul class="ticks amenities" id="amenities"></ul>
-    </div>
-    <div>
-      <h2>House rules</h2>
-      <ul class="ticks rules" id="rules"></ul>
-    </div>
-  </section>
+  <section class="plan" id="plan" aria-labelledby="plan-h">
+    <div class="wrap plan-in">
+      <div class="plan-head">
+        <h2 id="plan-h">Send a request</h2>
+        <p>Each form opens your email app with the message already written. Press send and the Concierge replies in minutes.</p>
+      </div>
 
-  <section id="actions" aria-labelledby="actions-h">
-    <h2 id="actions-h">Book or ask anything</h2>
-    <p class="actions-intro">Each form opens your email app with a ready-to-send message to our Concierge bot. Hit send and you'll hear back in minutes.</p>
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="Request type">
+          <button class="tab" type="button" role="tab" id="tab-book" aria-controls="book" aria-selected="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Book</button>
+          <button class="tab" type="button" role="tab" id="tab-times" aria-controls="times" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Early/late</button>
+          <button class="tab" type="button" role="tab" id="tab-issue" aria-controls="issue" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>Issue</button>
+          <button class="tab" type="button" role="tab" id="tab-message" aria-controls="message" aria-selected="false" tabindex="-1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Message</button>
+        </div>
 
-    <div class="actions">
-      <!-- a. Request to book -->
-      <details class="card" id="book" open>
-        <summary>
-          <span class="card-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
-          <span><span class="card-title">Request to book</span><span class="card-sub">Pick dates, we'll confirm and email a payment link.</span></span>
-          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </summary>
-        <div class="card-body">
+        <!-- a. Request to book -->
+        <div class="tabpanel" role="tabpanel" id="book" aria-labelledby="tab-book">
+          <div class="panel-head">
+            <h3>Request to book</h3>
+            <p>Pick your dates. Bookings confirms them and emails a secure payment link.</p>
+          </div>
           <form id="form-book" novalidate data-kind="book">
-            <div class="field">
-              <label for="book-name">Your name <span class="req" aria-hidden="true">*</span></label>
-              <input id="book-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="book-name-err">
-              <p class="error" id="book-name-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="book-email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="book-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="book-email-err">
-              <p class="error" id="book-email-err" aria-live="polite"></p>
-            </div>
             <div class="row">
+              <div class="field">
+                <label for="book-name">Your name <span class="req" aria-hidden="true">*</span></label>
+                <input id="book-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="book-name-err">
+                <p class="error" id="book-name-err" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="book-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input id="book-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="book-email-err">
+                <p class="error" id="book-email-err" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="row row-2">
               <div class="field">
                 <label for="book-in">Check-in <span class="req" aria-hidden="true">*</span></label>
                 <input id="book-in" name="checkin" type="date" required aria-describedby="book-in-err">
@@ -103,31 +127,30 @@
             </div>
             <p class="estimate" id="book-estimate" aria-live="polite"></p>
             <div class="form-foot">
-              <button class="btn btn-primary" type="submit">Email booking request</button>
-              <p class="small-print">No payment now. Bookings sends a secure Stripe link once dates are confirmed.</p>
+              <button class="btn btn-sun btn-block" type="submit">Email booking request</button>
+              <p class="small-print">No payment now. You'll get a Stripe link once your dates are confirmed.</p>
             </div>
           </form>
         </div>
-      </details>
 
-      <!-- b. Early check-in / late checkout -->
-      <details class="card" id="times">
-        <summary>
-          <span class="card-icon teal" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-          <span><span class="card-title">Early check-in / late checkout</span><span class="card-sub" id="times-sub">Arrive early or leave late for a small fee.</span></span>
-          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </summary>
-        <div class="card-body">
+        <!-- b. Early check-in / late checkout -->
+        <div class="tabpanel" role="tabpanel" id="times" aria-labelledby="tab-times" hidden>
+          <div class="panel-head">
+            <h3>Early check-in or late checkout</h3>
+            <p id="times-sub">Arrive early or leave late for a small fee.</p>
+          </div>
           <form id="form-times" novalidate data-kind="times">
-            <div class="field">
-              <label for="times-name">Your name <span class="req" aria-hidden="true">*</span></label>
-              <input id="times-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="times-name-err">
-              <p class="error" id="times-name-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="times-email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="times-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="times-email-err">
-              <p class="error" id="times-email-err" aria-live="polite"></p>
+            <div class="row">
+              <div class="field">
+                <label for="times-name">Your name <span class="req" aria-hidden="true">*</span></label>
+                <input id="times-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="times-name-err">
+                <p class="error" id="times-name-err" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="times-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input id="times-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="times-email-err">
+                <p class="error" id="times-email-err" aria-live="polite"></p>
+              </div>
             </div>
             <fieldset id="times-type" aria-describedby="times-type-err">
               <legend>Request <span class="req" aria-hidden="true">*</span></legend>
@@ -137,7 +160,7 @@
               </div>
               <p class="error" id="times-type-err" aria-live="polite"></p>
             </fieldset>
-            <div class="row">
+            <div class="row row-2">
               <div class="field">
                 <label for="times-date">Date <span class="req" aria-hidden="true">*</span></label>
                 <input id="times-date" name="date" type="date" required aria-describedby="times-date-err">
@@ -151,30 +174,29 @@
             </div>
             <p class="hint" id="times-time-hint"></p>
             <div class="form-foot">
-              <button class="btn btn-primary" type="submit">Email time request</button>
+              <button class="btn btn-sun btn-block" type="submit">Email time request</button>
             </div>
           </form>
         </div>
-      </details>
 
-      <!-- c. Report an issue -->
-      <details class="card" id="issue">
-        <summary>
-          <span class="card-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg></span>
-          <span><span class="card-title">Report an issue</span><span class="card-sub">Something broken or missing? Turnover is on it.</span></span>
-          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </summary>
-        <div class="card-body">
+        <!-- c. Report an issue -->
+        <div class="tabpanel" role="tabpanel" id="issue" aria-labelledby="tab-issue" hidden>
+          <div class="panel-head">
+            <h3>Report an issue</h3>
+            <p>Something broken or missing? Turnover sends a fix.</p>
+          </div>
           <form id="form-issue" novalidate data-kind="issue">
-            <div class="field">
-              <label for="issue-name">Your name <span class="req" aria-hidden="true">*</span></label>
-              <input id="issue-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="issue-name-err">
-              <p class="error" id="issue-name-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="issue-email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="issue-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="issue-email-err">
-              <p class="error" id="issue-email-err" aria-live="polite"></p>
+            <div class="row">
+              <div class="field">
+                <label for="issue-name">Your name <span class="req" aria-hidden="true">*</span></label>
+                <input id="issue-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="issue-name-err">
+                <p class="error" id="issue-name-err" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="issue-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input id="issue-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="issue-email-err">
+                <p class="error" id="issue-email-err" aria-live="polite"></p>
+              </div>
             </div>
             <div class="field">
               <label for="issue-what">What's wrong? <span class="req" aria-hidden="true">*</span></label>
@@ -187,34 +209,33 @@
                 <label class="choice"><input type="radio" name="urgent" value="Yes"><span>Yes, urgent</span></label>
                 <label class="choice"><input type="radio" name="urgent" value="No"><span>No, it can wait</span></label>
               </div>
-              <p class="hint" id="issue-urgent-hint">Urgent issues are escalated to a human right away. For emergencies, call 911.</p>
+              <p class="hint" id="issue-urgent-hint">Urgent issues go to a human right away. For emergencies, call 911.</p>
               <p class="error" id="issue-urgent-err" aria-live="polite"></p>
             </fieldset>
             <div class="form-foot">
-              <button class="btn btn-primary" type="submit">Email issue report</button>
+              <button class="btn btn-sun btn-block" type="submit">Email issue report</button>
             </div>
           </form>
         </div>
-      </details>
 
-      <!-- d. Message the host -->
-      <details class="card" id="message">
-        <summary>
-          <span class="card-icon teal" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span>
-          <span><span class="card-title">Message the host</span><span class="card-sub">Questions about the stay, parking, the neighborhood.</span></span>
-          <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </summary>
-        <div class="card-body">
+        <!-- d. Message the host -->
+        <div class="tabpanel" role="tabpanel" id="message" aria-labelledby="tab-message" hidden>
+          <div class="panel-head">
+            <h3>Message the host</h3>
+            <p>Questions about the stay, parking or the neighborhood.</p>
+          </div>
           <form id="form-message" novalidate data-kind="message">
-            <div class="field">
-              <label for="msg-name">Your name <span class="req" aria-hidden="true">*</span></label>
-              <input id="msg-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="msg-name-err">
-              <p class="error" id="msg-name-err" aria-live="polite"></p>
-            </div>
-            <div class="field">
-              <label for="msg-email">Email <span class="req" aria-hidden="true">*</span></label>
-              <input id="msg-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="msg-email-err">
-              <p class="error" id="msg-email-err" aria-live="polite"></p>
+            <div class="row">
+              <div class="field">
+                <label for="msg-name">Your name <span class="req" aria-hidden="true">*</span></label>
+                <input id="msg-name" name="name" type="text" autocomplete="name" maxlength="80" required aria-describedby="msg-name-err">
+                <p class="error" id="msg-name-err" aria-live="polite"></p>
+              </div>
+              <div class="field">
+                <label for="msg-email">Email <span class="req" aria-hidden="true">*</span></label>
+                <input id="msg-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required aria-describedby="msg-email-err">
+                <p class="error" id="msg-email-err" aria-live="polite"></p>
+              </div>
             </div>
             <div class="field">
               <label for="msg-text">Message <span class="req" aria-hidden="true">*</span></label>
@@ -222,38 +243,47 @@
               <p class="error" id="msg-text-err" aria-live="polite"></p>
             </div>
             <div class="form-foot">
-              <button class="btn btn-primary" type="submit">Email the host</button>
+              <button class="btn btn-sun btn-block" type="submit">Email the host</button>
             </div>
           </form>
         </div>
-      </details>
+      </div>
     </div>
   </section>
 
-  <section aria-labelledby="stays-h">
+  <section class="wrap stays-sec" aria-labelledby="stays-h">
     <h2 id="stays-h">Other stays</h2>
     <div class="stays" id="stays"></div>
   </section>
 
   <section class="how" aria-labelledby="how-h">
-    <h2 id="how-h">How it works</h2>
-    <p>A small team of AI bots runs our stays, with a human founder one escalation away.</p>
-    <div class="bots">
-      <div class="bot"><div class="bot-name"><i aria-hidden="true">C</i>Concierge</div><p>Reads every email and answers guests in minutes, day or night.</p></div>
-      <div class="bot"><div class="bot-name"><i aria-hidden="true">B</i>Bookings</div><p>Checks dates, confirms reservations and emails your payment link.</p></div>
-      <div class="bot"><div class="bot-name"><i aria-hidden="true">T</i>Turnover</div><p>Schedules cleaning between stays and handles maintenance fixes.</p></div>
-      <div class="bot"><div class="bot-name"><i aria-hidden="true">M</i>Manager</div><p>Escalates anything unusual or urgent to our founder.</p></div>
+    <div class="wrap">
+      <h2 id="how-h">How it works</h2>
+      <p class="how-sub">A small team of AI bots answers every email, with our founder one step away.</p>
+      <ol class="flow">
+        <li class="node node-you"><span class="node-name">You</span><span class="node-line">Send a request from this page.</span></li>
+        <li class="node"><span class="node-name">Concierge</span><span class="node-line">Reads every email and replies in minutes, day or night.</span></li>
+        <li class="node node-pair">
+          <div><span class="node-name">Bookings</span><span class="node-line">Confirms dates and emails your payment link.</span></div>
+          <div><span class="node-name">Turnover</span><span class="node-line">Schedules cleaning and handles repairs.</span></div>
+        </li>
+        <li class="node"><span class="node-name">Manager</span><span class="node-line">Escalates anything urgent to our founder.</span></li>
+      </ol>
+      <p class="stripe-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Payments are processed by Stripe in test mode.</p>
     </div>
-    <p class="stripe-note"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Payments are processed by Stripe in test mode.</p>
   </section>
 </main>
 
-<footer>
+<footer class="footer">
   <div class="wrap">
     <p>Demo built at the Grok Bot Hackathon Austin. Test mode only, no real bookings.</p>
-    <p><span data-brand>Austin Co-Host Co.</span> · No cookies, analytics or tracking.</p>
+    <p><span data-brand>Austin Co-Host Co.</span> uses no cookies, analytics or tracking.</p>
   </div>
 </footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="bat" viewBox="0 0 24 10"><path d="M0 3.2C2.6 1.4 5.2 1.6 7.4 3.4c.6-.9 1.3-1.6 2.1-1.9l.8 1.2.5-1.4h.4l.5 1.4.8-1.2c.8.3 1.5 1 2.1 1.9 2.2-1.8 4.8-2 7.4-.2-2 .5-3.2 1.6-3.8 3.4-1.6-.9-3.4-.6-4.6.8L12 9.3l-1.2-1.9c-1.2-1.4-3-1.7-4.6-.8C5.6 4.8 4.4 3.7 2.4 3.2z" fill="currentColor"/></symbol>
+</svg>
 
 <script src="app.js"></script>
 </body>
